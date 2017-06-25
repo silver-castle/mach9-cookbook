@@ -13,7 +13,8 @@ class Mach9:
                  load_env=True, request_class=None, protocol=None,
                  serve=None, serve_multiple=None, log=None, netlog=None,
                  log_config=LOGGING, update_current_time=None,
-                 get_current_time=None, composition_view=None):
+                 get_current_time=None, composition_view=None,
+                 body_channel_class=None, reply_channel_class=None)
 ```
 
 You can use Mach9's components to making your framework.  
