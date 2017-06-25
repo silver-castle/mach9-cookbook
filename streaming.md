@@ -1,0 +1,70 @@
+# Streaming
+
+## Request Streaming
+
+```python
+from mach9 import Mach9
+from mach9.views import CompositionView
+from mach9.views import HTTPMethodView
+from mach9.views import stream as stream_decorator
+from mach9.blueprints import Blueprint
+from mach9.response import stream, text
+
+bp = Blueprint('blueprint_request_stream')
+app = Mach9('request_stream')
+
+
+class SimpleView(HTTPMethodView):
+
+    @stream_decorator
+    async def post(self, request):
+        result = ''
+        while True:
+            body_chunk = await request.stream.receive()
+            if body_chunk['more_content'] is False:
+                break
+            result += body_chunk['content'].decode('utf-8')
+        return text(result)
+
+
+@app.post('/stream', stream=True)
+async def post(self, request):
+    result = ''
+    while True:
+        body_chunk = await request.stream.receive()
+        if body_chunk['more_content'] is False:
+            break
+        result += body_chunk['content'].decode('utf-8')
+    return text(result)
+
+
+@bp.put('/bp_stream', stream=True)
+async def put(self, request):
+    result = ''
+    while True:
+        body_chunk = await request.stream.receive()
+        if body_chunk['more_content'] is False:
+            break
+        result += body_chunk['content'].decode('utf-8')
+    return text(result)
+
+
+async def post_handler(request):
+    result = ''
+    while True:
+        body_chunk = await request.stream.receive()
+        if body_chunk['more_content'] is False:
+            break
+        result += body_chunk['content'].decode('utf-8')
+    return text(result)
+
+app.blueprint(bp)
+app.add_route(SimpleView.as_view(), '/method_view')
+view = CompositionView()
+view.add(['POST'], post_handler, stream=True)
+app.add_route(view, '/composition_view')
+
+
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=8000)
+```
