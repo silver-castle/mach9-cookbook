@@ -20,5 +20,5 @@ if __name__ == '__main__':
 Run server
 
 ```
-uvicorn server:app.asgi_handler
+uvicorn server:app
 ```
