@@ -2,6 +2,8 @@
 
 ## Request Streaming
 
+Mach9 allows you to get request data by stream, as below.
+
 ```python
 from mach9 import Mach9
 from mach9.views import CompositionView
@@ -67,4 +69,37 @@ app.add_route(view, '/composition_view')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000)
+```
+
+## Response Streaming
+
+Mach9 allows you to stream content to the client with the `stream` method.
+
+```python
+from mach9 import Mach9
+from mach9.response import stream
+
+app = Mach9('response_stream')
+
+
+@app.post('/post/<id>', stream=True)
+async def post(request, id):
+    assert isinstance(request.stream, BodyChannel)
+
+    async def streaming(channel):
+        while True:
+            body_chunk = await request.stream.receive()
+            if body_chunk['more_content'] is False:
+                break
+            await channel.send(body_chunk['content'])
+    return stream(streaming)
+
+
+@app.get('/get')
+async def get(request):
+    async def streaming(channel):
+        await channel.send(b'foo')
+        await channel.send(b'')
+        await channel.send(b'bar')
+    return stream(streaming)
 ```
