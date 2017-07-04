@@ -2,7 +2,8 @@
 
 ## Request Streaming
 
-Mach9 allows you to get request data by stream, as below.
+Mach9 allows you to get request data by stream, as below.  
+Only post, put and patch decorator have stream argument.
 
 ```python
 from mach9 import Mach9
