@@ -3,7 +3,8 @@
 ## Request Streaming
 
 Mach9 allows you to get request data by stream, as below.  
-Only post, put and patch decorator have stream argument.
+Only post, put and patch decorator have stream argument.  
+If you put `Connection: close` in header, the connection certainly is closed.
 
 ```python
 from mach9 import Mach9
@@ -85,8 +86,6 @@ app = Mach9('response_stream')
 
 @app.post('/post/<id>', stream=True)
 async def post(request, id):
-    assert isinstance(request.stream, BodyChannel)
-
     async def streaming(channel):
         while True:
             body_chunk = await request.stream.receive()
