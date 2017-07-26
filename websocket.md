@@ -13,9 +13,9 @@ app = Mach9()
 async def test(request):
 
     async def streaming(channel):
-		# get data from websocket
+	# get data from websocket
         message = await request.stream.get()
-		# send data
+        # send data
         await channel.send(b'foo')
         await channel.send(b'')
         await channel.send(b'bar')
