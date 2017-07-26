@@ -30,7 +30,7 @@
 
 * [Logging](logging.md)
 
-* [Restructure](restructure.md)
+* [Websocket](websocket.md)
 
 * [Testing](testing.md)
 
