@@ -19,7 +19,6 @@ async def test(request):
         await channel.send(b'foo')
         await channel.send(b'')
         await channel.send(b'bar')
-        await asyncio.sleep(3)
     return websocket(streaming)
 
 if __name__ == '__main__':
